@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": ".",
+    "module": "EsNext",
+    "target": "ES2023",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*", "prisma/seed.ts"],
+  "exclude": ["node_modules", "dist"]
+}

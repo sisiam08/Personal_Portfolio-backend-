@@ -1,0 +1,12 @@
+model Experience {
+  id          String   @id @default(uuid())
+  companyName String
+  role        String
+  description String
+
+  startDate   DateTime
+  endDate     DateTime?
+  current     Boolean  @default(false)
+  
+  createdAt   DateTime @default(now())
+}

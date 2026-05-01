@@ -1,0 +1,14 @@
+model Skill {
+  id                 String        @id @default(uuid())
+  name               String
+  category           SkillCategory
+  icon               String
+
+  level              SkillLevel
+  projectExperience  Int
+  lastUsedYear       Int
+
+  createdAt          DateTime      @default(now())
+
+  projects           Project[]
+}

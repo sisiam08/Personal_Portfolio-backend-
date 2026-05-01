@@ -1,0 +1,11 @@
+model Education {
+  id          String   @id @default(uuid())
+  institute   String
+  degree      String
+  field       String
+
+  startYear   Int
+  endYear     Int?
+
+  createdAt   DateTime @default(now())
+}

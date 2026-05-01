@@ -1,0 +1,23 @@
+enum UserRole {
+  ADMIN
+}
+
+enum ProjectStatus {
+  ONGOING
+  COMPLETED
+  PLANNED
+}
+
+enum SkillCategory {
+  FRONTEND
+  BACKEND
+  DATABASE
+  DEVOPS
+  OTHER
+}
+
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
