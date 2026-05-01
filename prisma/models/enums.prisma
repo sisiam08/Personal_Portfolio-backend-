@@ -9,10 +9,13 @@ enum ProjectStatus {
 }
 
 enum SkillCategory {
-  FRONTEND
-  BACKEND
-  DATABASE
-  DEVOPS
+  FRONTEND       
+  BACKEND          
+  DATABASE         
+  ORM      
+  DEVOPS       
+  AUTHENTICATION   
+  LANGUAGE  
   OTHER
 }
 
