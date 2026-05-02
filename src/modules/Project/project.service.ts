@@ -62,9 +62,7 @@ const getAllProjects = async (query: Record<string, unknown>) => {
     include: {
       skills: true,
     },
-    orderBy: {
-      createdAt: "desc",
-    },
+    orderBy: [{ featured: "desc" }, { status: "asc" }, { createdAt: "desc" }],
   });
 
   const total = await prisma.project.count();

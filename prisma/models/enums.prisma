@@ -3,8 +3,8 @@ enum UserRole {
 }
 
 enum ProjectStatus {
-  ONGOING
   COMPLETED
+  ONGOING
   PLANNED
 }
 

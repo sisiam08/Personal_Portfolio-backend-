@@ -6,8 +6,8 @@ model Project {
   description String
   problem     String
   solution    String
-  challenges String
-  futurePlan String
+  challenges String?
+  futurePlan String?
 
   githubUrl   String?
   liveUrl     String?
