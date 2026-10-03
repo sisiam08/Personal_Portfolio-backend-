@@ -78,10 +78,22 @@ const deleteSkill = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const setHeroSkills = catchAsync(async (req: Request, res: Response) => {
+  const result = await SkillService.setHeroSkills(req.body.ids);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Hero skills updated successfully",
+    data: result,
+  });
+});
+
 export const SkillController = {
   createSkill,
   getAllSkills,
   getSkillById,
   updateSkill,
   deleteSkill,
+  setHeroSkills,
 };

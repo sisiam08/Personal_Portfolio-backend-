@@ -23,7 +23,19 @@ export const updateSkillSchema = z.object({
   })
 });
 
+export const setHeroSkillsSchema = z.object({
+  body: z.object({
+    ids: z
+      .array(z.string().min(1))
+      .max(5, "You can select up to 5 hero chips")
+      .refine((ids) => new Set(ids).size === ids.length, {
+        message: "Duplicate skill ids are not allowed",
+      }),
+  }),
+});
+
 export const SkillValidation = {
   createSkillSchema,
-  updateSkillSchema
+  updateSkillSchema,
+  setHeroSkillsSchema,
 };

@@ -17,6 +17,14 @@ router.post(
 
 router.get("/", SkillController.getAllSkills);
 
+// Must be declared before "/:id" so "hero" is not treated as an id.
+router.put(
+  "/hero",
+  auth_middleware(),
+  validateRequest(SkillValidation.setHeroSkillsSchema as any),
+  SkillController.setHeroSkills
+);
+
 router.get("/:id", SkillController.getSkillById);
 
 router.patch(

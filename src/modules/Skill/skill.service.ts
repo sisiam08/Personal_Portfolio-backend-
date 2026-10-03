@@ -65,10 +65,44 @@ const deleteSkill = async (id: string) => {
   return result;
 };
 
+const setHeroSkills = async (ids: string[]) => {
+  const unique = new Set(ids);
+  if (unique.size !== ids.length) {
+    throw Object.assign(new Error("Duplicate skill ids are not allowed"), {
+      statusCode: 400,
+    });
+  }
+
+  if (ids.length > 0) {
+    const existing = await prisma.skill.findMany({
+      where: { id: { in: ids } },
+      select: { id: true },
+    });
+    const found = new Set(existing.map((s) => s.id));
+    const missing = ids.find((id) => !found.has(id));
+    if (missing) {
+      throw Object.assign(new Error(`Skill ${missing} was not found`), {
+        statusCode: 400,
+      });
+    }
+  }
+
+  // Clear every heroOrder, then assign 0..n-1 in a single transaction.
+  await prisma.$transaction([
+    prisma.skill.updateMany({ data: { heroOrder: null } }),
+    ...ids.map((id, index) =>
+      prisma.skill.update({ where: { id }, data: { heroOrder: index } }),
+    ),
+  ]);
+
+  return { count: ids.length };
+};
+
 export const SkillService = {
   createSkill,
   getAllSkills,
   getSkillById,
   updateSkill,
-  deleteSkill
+  deleteSkill,
+  setHeroSkills
 };

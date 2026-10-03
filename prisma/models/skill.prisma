@@ -8,7 +8,11 @@ model Skill {
   projectExperience  Int
   lastUsedYear       Int
 
+  heroOrder          Int?
+
   createdAt          DateTime      @default(now())
 
   projects           Project[]
+
+  @@index([heroOrder])
 }
