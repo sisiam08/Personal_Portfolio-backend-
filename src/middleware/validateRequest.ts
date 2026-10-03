@@ -4,21 +4,25 @@ import { NextFunction, Request, Response } from "express";
 
 const validateRequest = (schema: ZodObject) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    // If request has files (multipart/form-data), we might need to parse body manually if it comes as stringified JSON
-    // but typically validating req.body is sufficient. For multer + zod, we only validate the text fields.
-    if (req.body && req.body.data && typeof req.body.data === 'string') {
-        try {
-            const parsedData = JSON.parse(req.body.data);
-            req.body = { ...req.body, ...parsedData };
-            delete req.body.data;
-        } catch(e) {
-            // let zod fail
-        }
+    // Multipart forms may send a stringified JSON payload under `data`.
+    if (req.body && req.body.data && typeof req.body.data === "string") {
+      try {
+        const parsedData = JSON.parse(req.body.data);
+        req.body = { ...req.body, ...parsedData };
+        delete req.body.data;
+      } catch (e) {
+        // let zod fail
+      }
     }
-    await schema.parseAsync({
+
+    // Use the parsed result: this applies coercion/transforms (numbers,
+    // booleans, skills string -> array) that the raw body would otherwise miss.
+    const parsed = (await schema.parseAsync({
       body: req.body,
       cookies: req.cookies,
-    });
+    })) as { body: Record<string, unknown> };
+
+    req.body = parsed.body;
 
     next();
   });

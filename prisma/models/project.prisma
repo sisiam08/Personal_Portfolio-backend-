@@ -16,7 +16,11 @@ model Project {
   featured    Boolean       @default(false)
   image       String
 
+  order       Int           @default(0)
+
   createdAt   DateTime      @default(now())
 
   skills      Skill[]
+
+  @@index([order])
 }

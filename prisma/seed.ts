@@ -1,11 +1,9 @@
 import config from "../src/config";
 import { UserRole } from "../src/generated/prisma/enums";
-import { auth } from "../src/lib/auth";
 import { prisma } from "../src/lib/prisma";
 
 export async function seedAdmin() {
   try {
-    // Check required admin config
     if (!config.admin.email || !config.admin.name || !config.admin.password) {
       console.warn(
         "Admin credentials not set in .env. Skipping admin creation.",
@@ -13,7 +11,6 @@ export async function seedAdmin() {
       return;
     }
 
-    // Check if admin already exists
     const existingAdmin = await prisma.user.findUnique({
       where: {
         email: config.admin.email,
@@ -24,6 +21,9 @@ export async function seedAdmin() {
       console.log("✓ Admin user already exists");
       return;
     }
+
+    process.env.BETTER_AUTH_ALLOW_SIGNUP = "true";
+    const { auth } = await import("../src/lib/auth");
 
     await auth.api.signUpEmail({
       headers: new Headers({
@@ -37,7 +37,6 @@ export async function seedAdmin() {
       },
     });
 
-    // Mark email as verified and set role to ADMIN
     await prisma.user.update({
       where: {
         email: config.admin.email,

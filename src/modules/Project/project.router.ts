@@ -15,6 +15,14 @@ router.post(
   ProjectController.createProject
 );
 
+// Must be declared before "/:id" so "reorder" is not treated as an id.
+router.patch(
+  "/reorder",
+  auth_middleware(),
+  validateRequest(ProjectValidation.reorderProjectsSchema as any),
+  ProjectController.reorderProjects
+);
+
 router.get("/", ProjectController.getAllProjects);
 
 router.get("/:slug", ProjectController.getProjectBySlug);

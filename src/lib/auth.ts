@@ -4,6 +4,8 @@ import { prisma } from "./prisma";
 import { UserRole } from "../generated/prisma/enums";
 import config from "../config";
 
+const isProduction = process.env.NODE_ENV === "production";
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -12,11 +14,16 @@ export const auth = betterAuth({
   trustedOrigins: [config.appUrl!, config.betterAuth.betterAuthUrl!],
   emailAndPassword: {
     enabled: true,
+    // Public email/password sign-up is disabled by default. The one-time admin
+    // seed opts in by setting BETTER_AUTH_ALLOW_SIGNUP=true before importing
+    // this module (see prisma/seed.ts). This is NOT a public registration path.
+    disableSignUp: process.env.BETTER_AUTH_ALLOW_SIGNUP !== "true",
   },
   advanced: {
-    useSecureCookies: true,
+    // Secure cookies only in production so local http://localhost dev works.
+    useSecureCookies: isProduction,
     defaultCookieAttributes: {
-      secure: true,
+      secure: isProduction,
       sameSite: "lax",
       httpOnly: true,
       path: "/",

@@ -16,4 +16,7 @@ router.post(
 // Admin route to view messages
 router.get("/", auth_middleware(), MessageController.getAllMessages);
 
+// Admin route to delete a message
+router.delete("/:id", auth_middleware(), MessageController.deleteMessage);
+
 export const MessageRoutes = router;

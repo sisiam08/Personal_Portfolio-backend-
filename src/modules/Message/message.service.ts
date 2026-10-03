@@ -16,7 +16,15 @@ const getAllMessages = async () => {
   return result;
 };
 
+const deleteMessage = async (id: string) => {
+  const result = await prisma.message.delete({
+    where: { id },
+  });
+  return result;
+};
+
 export const MessageService = {
   createMessage,
-  getAllMessages
+  getAllMessages,
+  deleteMessage
 };

@@ -85,10 +85,22 @@ const deleteProject = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const reorderProjects = catchAsync(async (req: Request, res: Response) => {
+  const result = await ProjectService.reorderProjects(req.body.ids);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Projects reordered successfully",
+    data: result,
+  });
+});
+
 export const ProjectController = {
   createProject,
   getAllProjects,
   getProjectBySlug,
   updateProject,
   deleteProject,
+  reorderProjects,
 };
