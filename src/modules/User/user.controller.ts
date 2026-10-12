@@ -22,13 +22,22 @@ const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
      throw new Error("Unauthorized");
   }
 
-  const file = req.file as Express.Multer.File;
+  const files = req.files as
+    | { [fieldname: string]: Express.Multer.File[] }
+    | undefined;
 
   // Prepare update data
   const updateData: UserUpdateInput = {...req.body};
 
-  if (file) {
-    updateData.image = (file as any).path || (file as any).url;
+  const imageFile = files?.image?.[0];
+  if (imageFile) {
+    updateData.image = (imageFile as any).path || (imageFile as any).url;
+  }
+
+  const resumeFile = files?.resume?.[0];
+  if (resumeFile) {
+    updateData.resumeUrl =
+      (resumeFile as any).path || (resumeFile as any).url;
   }
 
   const result = await UserService.updateMyProfile(userId, updateData);

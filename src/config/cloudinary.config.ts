@@ -61,13 +61,18 @@ export const uploadFileToCloudinary = async (
 
 export const deleteFileFromCloudinary = async (url: string) => {
   try {
-    const regex = /\/v\d+\/(.+?)(?:\.[a-zA-Z0-9]+)+$/;
+    const regex = /\/(image|raw|video|auto)\/upload\/v\d+\/(.+)$/;
 
     const match = url.match(regex);
 
-    if (match && match[1]) {
-      const publicId = match[1];
-      await cloudinary.uploader.destroy(publicId, { resource_type: "image" });
+    if (match && match[1] && match[2]) {
+      const resourceType = match[1] === "auto" ? "raw" : match[1];
+      // Image/video public_ids exclude the extension; raw (PDF/doc) public_ids keep it.
+      const publicId =
+        resourceType === "raw"
+          ? match[2]
+          : match[2].replace(/\.[a-zA-Z0-9]+$/, "");
+      await cloudinary.uploader.destroy(publicId, { resource_type: resourceType as "image" | "raw" | "video" });
       console.log(`File ${publicId} deleted successfully from Cloudinary.`);
     }
   } catch (error) {

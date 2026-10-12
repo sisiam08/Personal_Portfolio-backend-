@@ -12,7 +12,10 @@ router.get("/me", UserController.getMyProfile);
 router.patch(
   "/me",
   auth_middleware(),
-  upload.single("image"),
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "resume", maxCount: 1 },
+  ]),
   validateRequest(UserValidation.updateUserSchema as any),
   UserController.updateMyProfile
 );

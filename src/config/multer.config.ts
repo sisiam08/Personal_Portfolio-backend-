@@ -28,11 +28,12 @@ const storage = new CloudinaryStorage({
       }
 
       const originalName = file.originalname;
-      const extension = originalName
-        .substring(originalName.lastIndexOf("."))
-        .toLowerCase();
-      const fileNameWithoutExt = originalName
-        .substring(0, originalName.lastIndexOf("."))
+      const lastDot = originalName.lastIndexOf(".");
+      const extension =
+        lastDot > 0 ? originalName.substring(lastDot).toLowerCase() : "";
+      const fileNameWithoutExt = (
+        lastDot > 0 ? originalName.substring(0, lastDot) : originalName
+      )
         .toLowerCase()
         .replace(/\s+/g, "-")
         .replace(/[^a-z0-9\-]/g, "");
@@ -60,6 +61,8 @@ const storage = new CloudinaryStorage({
         folder: `personalPortfolio/${folder}`,
         public_id: uniqueName,
         resource_type: "auto",
+        type: "upload",
+        access_mode: "public",
         timeout: 120000, // 2 minutes timeout for large files
       };
     } catch (error) {
@@ -73,7 +76,7 @@ export const upload = multer({
   storage,
   limits: {
     fileSize: FILE_SIZE_LIMIT,
-    files: 1,
+    files: 2,
   },
   fileFilter: (req, file, cb) => {
     if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {

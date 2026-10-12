@@ -19,6 +19,14 @@ const updateMyProfile = async (id: string, payload: UserUpdateInput) => {
     deleteFileFromCloudinary(existing.image).catch(() => undefined);
   }
 
+  if (
+    payload.resumeUrl &&
+    existing?.resumeUrl &&
+    existing.resumeUrl !== payload.resumeUrl
+  ) {
+    deleteFileFromCloudinary(existing.resumeUrl).catch(() => undefined);
+  }
+
   return result;
 };
 
